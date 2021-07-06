@@ -1,9 +1,10 @@
 ﻿using System;
+using IComparable = ObjectsComparer.Interfaces.IComparable;
 
-namespace testes.Comparador.Atributos
+namespace ObjectsComparer.Attributes
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class Comparable : Attribute
+    public class Comparable : Attribute, IComparable
     {
     }
 }
