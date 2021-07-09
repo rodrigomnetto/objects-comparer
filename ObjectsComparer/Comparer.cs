@@ -15,7 +15,7 @@ namespace ObjectsComparer
         public IComparisonResult GetDifferences(object object1, object object2)
         {
             if (object1.GetType() != object2.GetType())
-                throw new Exception("Cannot compare different type objects.");
+                throw new ArgumentException("Cannot compare different type objects.");
 
             return _resolverFinder.FindResolver(object1.GetType()).Compare(object1, object2);
         }
