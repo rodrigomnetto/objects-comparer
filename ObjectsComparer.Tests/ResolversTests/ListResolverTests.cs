@@ -68,7 +68,7 @@ namespace ObjectsComparer.Tests.ResolversTests
         }
 
         [Fact]
-        public void should_return_is_equal_lists()
+        public void should_return_equal_lists()
         {
             //Arrange
             var mockedResolver = new Mock<IResolver>();
