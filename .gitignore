@@ -1,2 +1,6 @@
 .vs
 .vscode
+ObjectsComparer/obj
+ObjectsComparer/bin
+ObjectsComparer.Tests/obj
+ObjectsComparer.Tests/bin
