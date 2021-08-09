@@ -9,6 +9,6 @@ namespace ObjectsComparer.Factories
         public bool CanCreate(Type type)
             => type.IsPrimitive || type == typeof(string) || type == typeof(decimal);
 
-        public IResolver CreateResolver() => new ValueResolver();  
+        public IResolver CreateResolver() => new ValueResolver();
     }
 }

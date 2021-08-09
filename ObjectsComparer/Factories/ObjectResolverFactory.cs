@@ -2,6 +2,7 @@
 using ObjectsComparer.Interfaces;
 using ObjectsComparer.Resolvers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -12,28 +13,19 @@ namespace ObjectsComparer.Factories
     {
         private static readonly string DEFAULT_COMPARABLE_PROPERTY = "ID";
 
-        protected Type _resolvedType;
+        public bool CanCreate(Type type) => type.IsClass 
+                                         && !typeof(ICollection).IsAssignableFrom(type) 
+                                         && !type.IsGenericType
+                                         && typeof(string) != type;
 
-        public bool CanCreate(Type type)
+        public IResolver CreateResolver(Type type, IResolverFinder resolverFinder)
         {
-            if (type.IsClass && !type.IsGenericType)
-            {
-                _resolvedType = type;
-
-                return true;
-            }
-
-            return false;
-        }
-
-        public IResolver CreateResolver(IResolverFinder resolverFinder)
-        {
-            var comparableProperties = GetObjectComparableProperties(_resolvedType);
+            var comparableProperties = GetObjectComparableProperties(type);
 
             return new ObjectResolver(resolverFinder, comparableProperties);
         }
 
-        private IEnumerable<PropertyInfo> GetObjectComparableProperties(Type type)
+        private IEnumerable<PropertyInfo> GetObjectComparableProperties(Type type) //transformar em dependencia injetada, não testar detalhes
         {
             var comparableProps = type.GetProperties().Where(w => w.GetCustomAttributes(true).Where(w => w.GetType().Equals(typeof(Comparable))).Any());
 

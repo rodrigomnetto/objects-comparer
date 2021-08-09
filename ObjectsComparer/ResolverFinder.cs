@@ -20,7 +20,7 @@ namespace ObjectsComparer
             foreach (var factory in _objectResolverFactories)
             {
                 if (factory.CanCreate(type))
-                    return factory.CreateResolver(this);
+                    return factory.CreateResolver(type, this);
             }
 
             foreach (var factory in _valueResolverFactories)

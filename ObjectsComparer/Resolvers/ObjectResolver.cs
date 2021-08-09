@@ -7,7 +7,7 @@ namespace ObjectsComparer.Resolvers
 {
     public class ObjectResolver : AbstractObjectResolver
     {
-        IEnumerable<PropertyInfo> _comparableProperties;
+        readonly IEnumerable<PropertyInfo> _comparableProperties;
 
         public ObjectResolver(IResolverFinder resolverFinder, IEnumerable<PropertyInfo> comparableProperties) : base(resolverFinder) 
             => _comparableProperties = comparableProperties;        
@@ -21,11 +21,15 @@ namespace ObjectsComparer.Resolvers
 
         private IEnumerable<string> GetDifferentProperties(object object1, object object2)
         {
+            var differentProperties = new List<string>();
+
             foreach (var property in _comparableProperties)
             {
                 if (_resolverFinder.FindResolver(property.PropertyType).Compare(property.GetValue(object1), property.GetValue(object2)).IsDifferent)
-                    yield return property.Name;
+                    differentProperties.Add(property.Name);
             }
+
+            return differentProperties;
         }
     }
 }

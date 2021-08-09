@@ -10,6 +10,7 @@ namespace ObjectsComparer.Factories
         public bool CanCreate(Type type)
             => typeof(ICollection).IsAssignableFrom(type) && type.IsGenericType;
 
-        public IResolver CreateResolver(IResolverFinder resolverFinder) => new ListResolver(resolverFinder);
+        public IResolver CreateResolver(Type type, IResolverFinder resolverFinder) 
+            => new ListResolver(resolverFinder, type);
     }
 }

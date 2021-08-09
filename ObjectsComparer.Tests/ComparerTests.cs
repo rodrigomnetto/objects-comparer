@@ -12,7 +12,7 @@ namespace ObjectsComparer.Tests
 
         public ComparerTests()
         {
-            _mockedResolverFinder = new Mock<IResolverFinder>();
+            _mockedResolverFinder = new Mock<IResolverFinder>(); //fazer um CreateDefault ao inves de deixar no construtor
             _comparer = new Comparer(_mockedResolverFinder.Object);
         }
 
@@ -54,6 +54,40 @@ namespace ObjectsComparer.Tests
             _mockedResolverFinder.Verify(m => m.FindResolver(It.IsAny<Type>()), Times.Once);
             Assert.IsType<bool>(result);
             Assert.False(result);
+        }
+
+        [Fact]
+        public void should_return_different_comparison_result()
+        {
+            //Arrange
+            var mockedResolver = new Mock<IResolver>();
+            mockedResolver.Setup(x => x.Compare(It.IsAny<string>(), It.IsAny<string>())).Returns(new ComparisonResult(true));
+            _mockedResolverFinder.Setup(x => x.FindResolver(It.IsAny<Type>())).Returns(mockedResolver.Object);
+
+            //Act
+            var result = _comparer.GetDifferences("1", "1");
+
+            //Assert
+            _mockedResolverFinder.Verify(m => m.FindResolver(It.IsAny<Type>()), Times.Once);
+            Assert.IsAssignableFrom<IComparisonResult>(result);
+            Assert.True(result.IsDifferent);
+        }
+
+        [Fact]
+        public void should_return_equal_comparison_result()
+        {
+            //Arrange
+            var mockedResolver = new Mock<IResolver>();
+            mockedResolver.Setup(x => x.Compare(It.IsAny<string>(), It.IsAny<string>())).Returns(new ComparisonResult(false));
+            _mockedResolverFinder.Setup(x => x.FindResolver(It.IsAny<Type>())).Returns(mockedResolver.Object);
+
+            //Act
+            var result = _comparer.GetDifferences("1", "1");
+
+            //Assert
+            _mockedResolverFinder.Verify(m => m.FindResolver(It.IsAny<Type>()), Times.Once);
+            Assert.IsAssignableFrom<IComparisonResult>(result);
+            Assert.False(result.IsDifferent);
         }
     }
 }

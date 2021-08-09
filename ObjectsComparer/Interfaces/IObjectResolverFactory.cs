@@ -1,8 +1,10 @@
 ﻿
+using System;
+
 namespace ObjectsComparer.Interfaces
 {
     public interface IObjectResolverFactory : IResolverFactory
     {
-        IResolver CreateResolver(IResolverFinder resolverFinder);
+        IResolver CreateResolver(Type type, IResolverFinder resolverFinder);
     }
 }
